@@ -15,6 +15,7 @@ class Star {
     this.surfaceTemp;
     this.brightness; 
   }
+
   display() {
     fill(this.colour);
     stroke("orange");
@@ -22,7 +23,25 @@ class Star {
     //rotateY(millis(1000)/36);
   }
 }
+
+class Planet {
+  constructor(){
+    this.mass;
+    this.diameter;
+    this.distanceFromSun;
+    this.orbitalPeriod;
+    this.orbitalVelocity;
+    this.rotationPeriod;
+    this.moons;
+    this.ringSystem;
+  }
+}
+
 let sun = new Star;
+
+let earth = new Planet;
+// earth.mass = 5.97, earth.diameter = 3475, earth.distanceFromSun = 149.6;
+// earth.orbitalPeriod = 365.2, earth.orbitalVelocity = 29.8, earth.moons = 1, earth.ringSystem = false; 
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
