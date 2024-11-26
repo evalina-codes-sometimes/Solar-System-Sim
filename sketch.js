@@ -19,13 +19,15 @@ class Star {
   display() {
     fill(this.colour);
     stroke("orange");
-    sphere(this.radius); 
+    circle(this.x, this.y, this.radius); 
     //rotateY(millis(1000)/36);
   }
 }
 
 class Planet {
-  constructor(){
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
     this.mass;
     this.diameter;
     this.distanceFromSun;
@@ -34,26 +36,46 @@ class Planet {
     this.rotationPeriod;
     this.moons;
     this.ringSystem;
+    this.radians = 0;
+  }
+  getvelocity(){
+    let velocity = 2* Math.PI * this.distanceFromSun/8000;
+    return velocity;
+  }
+
+  orbit(y, x){
+    this.radians += this.getvelocity(); 
+    this.x = this.x + Math.cos(this.radians)*10;
+    this.y = this.y + Math.sin(this.radians)*10; 
+  }
+  display(){
+    fill(this.colour);
+    circle(this.x, this.y, this.diameter);
+    this.orbit(this.x, this.y);
+    //console.log(earth.radians);
   }
 }
 
-let sun = new Star;
+let sun = new Star(0, 0);
 
-let earth = new Planet;
 // earth.mass = 5.97, earth.diameter = 3475, earth.distanceFromSun = 149.6;
 // earth.orbitalPeriod = 365.2, earth.orbitalVelocity = 29.8, earth.moons = 1, earth.ringSystem = false; 
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  angleMode(DEGREES);
-  sun.colour = "yellow"; 
-  sun.radius = 35; 
-
+  earth = new Planet(0, 0);
+  
+  earth.distanceFromSun = 100;
+  earth.colour = "blue"; 
+  earth.diameter = 50; 
+  sun.radius = 100;
+  sun.colour = "yellow";
 }
 
 
 function draw() {
   background(220);
   orbitControl();
-  sun.display();
+  sun.display;
+  earth.display();
 }
