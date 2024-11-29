@@ -5,8 +5,8 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-const AU = 11; 
-const EARTH_YEAR = 365000000;
+const AU = 40; 
+const EARTH_YEAR = 10000;
 
 class Star {
   constructor(x, y) {
@@ -14,15 +14,15 @@ class Star {
     this.y = y; 
     this.colour;
     this.mass;
-    this.radius;
+    this.diameter;
     this.surfaceTemp;
     this.brightness; 
   }
 
   display() {
     fill(this.colour);
-    stroke("orange");
-    circle(this.x, this.y, this.radius); 
+    stroke("white");
+    circle(this.x, this.y, this.diameter); 
     //rotateY(millis(1000)/36);
   }
 }
@@ -35,7 +35,7 @@ class Planet {
     this.y = Math.sin(this.radians)*this.distanceFromSun; 
     this.mass;
     this.diameter;
-    this.orbitalPeriod = millis(v * EARTH_YEAR);
+    this.orbitalPeriod = v * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
     this.rotationPeriod;
     this.moons;
@@ -67,18 +67,17 @@ let sun = new Star(0, 0);
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   earth = new Planet(1, 1);
-  
-  earth.distanceFromSun = 100;
+  sun.diameter = 300;
+  earth.distanceFromSun = 200;
   earth.colour = "blue"; 
-  earth.diameter = 50; 
-  sun.radius = 100;
+  earth.diameter = 0.3; 
   sun.colour = "yellow";
 }
 
 
 function draw() {
-  background(220);
+  background(0);
   orbitControl();
-  sun.display;
+  sun.display();
   earth.display();
 }
