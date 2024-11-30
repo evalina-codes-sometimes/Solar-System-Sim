@@ -5,8 +5,8 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-const AU = 40; 
-const EARTH_YEAR = 10000;
+const AU = 35; 
+const EARTH_YEAR = 36500;
 
 class Star {
   constructor(x, y) {
@@ -28,25 +28,22 @@ class Star {
 }
 
 class Planet {
-  constructor(n, v){
+  constructor(astronomicalUnits, earthYears, orbiting){
+    this.astronomicalUnits = astronomicalUnits;
+    this.orbiting = orbiting;
     this.radians = 0;
-    this.distanceFromSun = n * AU;
+    this.distanceFromSun = this.astronomicalUnits * AU + this.orbiting.diameter/2;
     this.x = Math.cos(this.radians)*this.distanceFromSun;
     this.y = Math.sin(this.radians)*this.distanceFromSun; 
     this.mass;
     this.diameter;
-    this.orbitalPeriod = v * EARTH_YEAR;
+    this.orbitalPeriod = earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
-    this.rotationPeriod;
     this.moons;
     this.ringSystem;
   }
-  // getvelocity(){
-  //   let velocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
-  //   return velocity;
-  // }
 
-  orbit(y, x){
+  orbit(){
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.radians)*this.distanceFromSun;
     this.y = Math.sin(this.radians)*this.distanceFromSun; 
@@ -66,18 +63,27 @@ let sun = new Star(0, 0);
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  earth = new Planet(1, 1);
   sun.diameter = 300;
-  earth.distanceFromSun = 200;
+  // some = new Planet(5.2, 11.9, sun)
+  // othersome = new Planet (68, 559, sun);
+  // othersome.diameter = 15;
+  // othersome.colour = "pink";
+  // some.diameter = 30.5;
+  // some.colour = "brown";
+  earth = new Planet(1, 1, sun);
   earth.colour = "blue"; 
-  earth.diameter = 0.3; 
+  earth.diameter = 3; 
   sun.colour = "yellow";
+  // earth.distanceFromSun = 184;
 }
 
+//0.4	68	559
 
 function draw() {
   background(0);
   orbitControl();
   sun.display();
   earth.display();
+  // some.display();
+  // othersome.display();
 }
