@@ -7,6 +7,9 @@
 
 const AU = 35; 
 const EARTH_YEAR = 36500;
+let planets = [];
+let moons = [];
+let stars = [];
 
 class Star {
   constructor(x, y) {
@@ -56,20 +59,22 @@ class Planet {
   }
 }
 
+function assignData(){
+  
+}
+
 let sun = new Star(0, 0);
 
 // earth.mass = 5.97, earth.diameter = 3475, earth.distanceFromSun = 149.6;
 // earth.orbitalPeriod = 365.2, earth.orbitalVelocity = 29.8, earth.moons = 1, earth.ringSystem = false; 
 
+function preload(){
+  bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   sun.diameter = 300;
-  // some = new Planet(5.2, 11.9, sun)
-  // othersome = new Planet (68, 559, sun);
-  // othersome.diameter = 15;
-  // othersome.colour = "pink";
-  // some.diameter = 30.5;
-  // some.colour = "brown";
   earth = new Planet(1, 1, sun);
   earth.colour = "blue"; 
   earth.diameter = 3; 

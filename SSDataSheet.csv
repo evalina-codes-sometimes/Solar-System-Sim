@@ -1,0 +1,13 @@
+name,diameter,dist au ,earth yr
+sun,300,0,0.07
+mercury,1.05,0.4,0.24
+venus,2.5,0.7,0.6
+earth,3,1,1
+mars,1.5,1.5,1.9
+Ceres,0.3,2.8,4.6
+Jupiter,30.5,5.2,11.9
+Saturn,26,9.6,29.4
+Uranus,11,19.2,83.8
+Neptune,10.5,30,163.8
+Pluto,0.5,39.5,248
+Eris,0.4,68,559
