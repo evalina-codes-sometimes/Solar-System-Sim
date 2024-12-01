@@ -60,7 +60,11 @@ class Planet {
 }
 
 function assignData(){
-  
+  for (therow in bodiesData.rows()){
+    //Not working 
+   // let String therow.getString(theName) = new therow.get(type)();
+
+  }
 }
 
 let sun = new Star(0, 0);
