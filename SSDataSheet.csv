@@ -1,5 +1,5 @@
-type, thename,diameter,dist au ,earth yr, colour
-Sun, sun,300,0,0.07, yellow
+type,thename,diameter,distAu,earthYr,colour
+Star, sun,300,0,0.07, yellow
 Planet, mercury,1.05,0.4,0.24, grey
 Planet, venus,2.5,0.7,0.6, chocolate
 Planet, earth,3,1,1, blue

@@ -60,10 +60,15 @@ class Planet {
 }
 
 function assignData(){
-  for (therow in bodiesData.rows()){
-    //Not working 
-   // let String therow.getString(theName) = new therow.get(type)();
-
+  for (let row = 0; row<bodiesData.getRowCount(); row++){
+    if (bodiesData.getString(row, "type") === "Star"){
+      obj[bodiesData.get(row, "name")] =  new Star;
+    }
+    else if (bodiesData.getString(row, 'type') === "Planet"){
+      obj[bodiesData.get(row, "name")] =  new Planet;
+    }
+    obj[bodiesData.getInt(row, "diameter")].diameter = bodiesData.getInt(row, "diameter"); 
+    obj[bodiesData.getString(row, "name")].diameter = bodiesData.getInt(row, "diameter"); 
   }
 }
 
@@ -78,6 +83,7 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
+  assignData();
   sun.diameter = 300;
   earth = new Planet(1, 1, sun);
   earth.colour = "blue"; 
