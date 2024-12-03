@@ -62,12 +62,12 @@ class Planet {
 //not working, need help 
 function assignData(){
   for (let row = 0; row<bodiesData.getRowCount(); row++){
-    let thing = eval(bodiesData.getNum(row, "name"));
+    let thing = abs[bodiesData.getNum(row, "name")];
     if (bodiesData.getString(row, "type") === "Star"){
-      thing =  new Star;
+      thing =  new Star();
     }
     else if (bodiesData.getString(row, 'type') === "Planet"){
-      thing =  new Planet;
+      thing =  new Planet();
     }
     thing.diameter = bodiesData.getNum(row, "diameter"); 
     thing.distanceFromSun = bodiesData.getNum(row, "distAu"); 
