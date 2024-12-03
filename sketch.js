@@ -59,23 +59,33 @@ class Planet {
   }
 }
 
+//not working, need help 
 function assignData(){
   for (let row = 0; row<bodiesData.getRowCount(); row++){
+    let thing = eval(bodiesData.getNum(row, "name"));
     if (bodiesData.getString(row, "type") === "Star"){
-      obj[bodiesData.get(row, "name")] =  new Star;
+      thing =  new Star;
     }
     else if (bodiesData.getString(row, 'type') === "Planet"){
-      obj[bodiesData.get(row, "name")] =  new Planet;
+      thing =  new Planet;
     }
-    obj[bodiesData.getInt(row, "diameter")].diameter = bodiesData.getInt(row, "diameter"); 
-    obj[bodiesData.getString(row, "name")].diameter = bodiesData.getInt(row, "diameter"); 
+    thing.diameter = bodiesData.getNum(row, "diameter"); 
+    thing.distanceFromSun = bodiesData.getNum(row, "distAu"); 
+    thing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
+    thing.colour = bodiesData.getString(row, "colour");
+    if (bodiesData.getString(row, "type") === "Star"){
+      stars.push(thing);
+    }
+    else if (bodiesData.getString(row, 'type') === "Planet"){
+      planets.push(thing);
+    }
   }
 }
 
-let sun = new Star(0, 0);
+// let sun = new Star(0, 0);
 
-// earth.mass = 5.97, earth.diameter = 3475, earth.distanceFromSun = 149.6;
-// earth.orbitalPeriod = 365.2, earth.orbitalVelocity = 29.8, earth.moons = 1, earth.ringSystem = false; 
+// // earth.mass = 5.97, earth.diameter = 3475, earth.distanceFromSun = 149.6;
+// // earth.orbitalPeriod = 365.2, earth.orbitalVelocity = 29.8, earth.moons = 1, earth.ringSystem = false; 
 
 function preload(){
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
@@ -84,11 +94,11 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   assignData();
-  sun.diameter = 300;
-  earth = new Planet(1, 1, sun);
-  earth.colour = "blue"; 
-  earth.diameter = 3; 
-  sun.colour = "yellow";
+  // sun.diameter = 300;
+  // earth = new Planet(1, 1, sun);
+  // earth.colour = "blue"; 
+  // earth.diameter = 3; 
+  // sun.colour = "yellow";
   // earth.distanceFromSun = 184;
 }
 
@@ -97,8 +107,14 @@ function setup() {
 function draw() {
   background(0);
   orbitControl();
-  sun.display();
-  earth.display();
+  for (planet in planets){
+    this.display()
+  }
+  for (star in stars){
+    this.display();
+  }
+  // sun.display();
+  // earth.display();
   // some.display();
   // othersome.display();
 }
