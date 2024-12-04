@@ -10,6 +10,9 @@ const EARTH_YEAR = 36500;
 let planets = [];
 let moons = [];
 let stars = [];
+let stringFlipper = new Map();
+
+
 
 class Star {
   constructor(x, y) {
@@ -61,23 +64,19 @@ class Planet {
 
 //not working, need help 
 function assignData(){
+//n this will work!!!!
+  //eval(`${bodiesData.getString(0, "theName")} = new ${stringFlipper.get(bodiesData.get(0, "type"))}();`);
   for (let row = 0; row<bodiesData.rows; row++){
-    let thing = abs[bodiesData.getString(row, "theName")];
+    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`);
+    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).diameter = bodiesData.getNum(row, "diameter"); 
+    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).distanceFromSun = bodiesData.getNum(row, "distAu"); 
+    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).orbitalPeriod = bodiesData.getNum(row, "earthYr");
+    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).colour = bodiesData.getString(row, "colour");
     if (bodiesData.getString(row, "type") === "Star"){
-      thing =  new Star();
+      stars.push(eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`));
     }
     else if (bodiesData.getString(row, 'type') === "Planet"){
-      thing =  new Planet();
-    }
-    thing.diameter = bodiesData.getNum(row, "diameter"); 
-    thing.distanceFromSun = bodiesData.getNum(row, "distAu"); 
-    thing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
-    thing.colour = bodiesData.getString(row, "colour");
-    if (bodiesData.getString(row, "type") === "Star"){
-      stars.push(thing);
-    }
-    else if (bodiesData.getString(row, 'type') === "Planet"){
-      planets.push(thing);
+      planets.push(eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`));
     }
   }
 }
@@ -93,6 +92,8 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
+  stringFlipper.set('Star', Star);
+  stringFlipper.set('Planet', Planet);
   assignData();
   // sun.diameter = 300;
   // earth = new Planet(1, 1, sun);
