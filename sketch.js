@@ -62,24 +62,38 @@ class Planet {
   }
 }
 
-//not working, need help 
+function checkForStar(body){
+  if (stars.includes(sun)){
+    return sun;
+  }
+  else{
+    console.log("No sun sorry!");
+  }
+}
+
+//add if statement with type 
+
 function assignData(){
 //n this will work!!!!
   //eval(`${bodiesData.getString(0, "theName")} = new ${stringFlipper.get(bodiesData.get(0, "type"))}();`);
-  for (let row = 0; row<bodiesData.rows; row++){
-    let tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`);
-    tempThing.diameter = bodiesData.getNum(row, "diameter"); 
-    tempThing.distanceFromSun = bodiesData.getNum(row, "distAu"); 
-    tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
-    tempThing.colour = bodiesData.get(row, "colour");
+  for (let row = 0; row<bodiesData.getRowCount(); row++){
+    let tempThing;
     if (bodiesData.get(row, "type") === "Star"){
-      tempThing.x =row;
-      tempThing.y = row;
+      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
+      tempThing.diameter = bodiesData.get(row, "diamteter"); 
+      tempThing.colour = bodiesData.get(row, "colour"); 
       stars.push(tempThing);
     }
-    else if (bodiesData.get(row, 'type') === "Planet"){
+    else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
+      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`); 
+      tempThing.diameter = bodiesData.get(row, "diameter");
+      tempThing.colour = bodiesData.get(row, "colour");
       planets.push(tempThing);
+
     }
+    tempThing.diameter = bodiesData.getNum(row, "diameter"); 
+    tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
+    tempThing.colour = bodiesData.get(row, "colour");
   }
 }
 
