@@ -67,16 +67,18 @@ function assignData(){
 //n this will work!!!!
   //eval(`${bodiesData.getString(0, "theName")} = new ${stringFlipper.get(bodiesData.get(0, "type"))}();`);
   for (let row = 0; row<bodiesData.rows; row++){
-    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`);
-    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).diameter = bodiesData.getNum(row, "diameter"); 
-    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).distanceFromSun = bodiesData.getNum(row, "distAu"); 
-    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).orbitalPeriod = bodiesData.getNum(row, "earthYr");
-    eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`).colour = bodiesData.getString(row, "colour");
-    if (bodiesData.getString(row, "type") === "Star"){
-      stars.push(eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`));
+    let tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`);
+    tempThing.diameter = bodiesData.getNum(row, "diameter"); 
+    tempThing.distanceFromSun = bodiesData.getNum(row, "distAu"); 
+    tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
+    tempThing.colour = bodiesData.get(row, "colour");
+    if (bodiesData.get(row, "type") === "Star"){
+      tempThing.x =row;
+      tempThing.y = row;
+      stars.push(tempThing);
     }
-    else if (bodiesData.getString(row, 'type') === "Planet"){
-      planets.push(eval(`${bodiesData.getString(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}();`));
+    else if (bodiesData.get(row, 'type') === "Planet"){
+      planets.push(tempThing);
     }
   }
 }
@@ -108,11 +110,11 @@ function setup() {
 function draw() {
   background(0);
   orbitControl();
-  for (planet in planets){
-    this.display()
+  for (let thePlanet of planets){
+    thePlanet.display();
   }
-  for (star in stars){
-    this.display();
+  for (let theStar of stars){
+    theStar.display();
   }
   // sun.display();
   // earth.display();
