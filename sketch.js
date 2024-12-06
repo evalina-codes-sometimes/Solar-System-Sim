@@ -27,7 +27,7 @@ class Star {
 
   display() {
     fill(this.colour);
-    stroke("white");
+    noStroke();
     circle(this.x, this.y, this.diameter); 
     //rotateY(millis(1000)/36);
   }
@@ -58,7 +58,47 @@ class Planet {
     fill(this.colour);
     circle(this.x, this.y, this.diameter);
     this.orbit(this.x, this.y);
-    //console.log(earth.radians);
+  }
+  displayOrbit() {
+    noFill();
+    strokeWeight(0.5);
+    stroke('white');
+    circle(this.orbiting.x, this.orbiting.y, this.distanceFromSun*2);
+  }
+  createMoon(){
+    
+  }
+}
+
+class Moon {
+  constructor(orbiting){
+    this.astronomicalUnits = 0.002254;
+    this.orbiting = orbiting;
+    this.radians = 0;
+    this.distanceFromOrbiting = this.astronomicalUnits * AU + this.orbiting.diameter/2;
+    this.x = Math.cos(this.radians)*this.distanceFromOrbiting;
+    this.y = Math.sin(this.radians)*this.distanceFromOrbiting; 
+    this.mass;
+    this.diameter;
+    this.orbitalPeriod = earthYears * EARTH_YEAR;
+    this.orbitalVelocity = 2* Math.PI * this.distanceFromOrbiting/this.orbitalPeriod;
+  }
+  orbit(){
+    this.radians += this.orbitalVelocity; 
+    this.x = Math.cos(this.radians)*this.distanceFromOrbiting;
+    this.y = Math.sin(this.radians)*this.distanceFromOrbiting; 
+  }
+  display(){
+    fill(this.colour);
+    circle(this.x, this.y, this.diameter);
+    this.orbit(this.x, this.y);
+  }
+  displayOrbit() {
+    smooth();
+    noFill();
+    strokeWeight(0.25);
+    stroke('white');
+    circle(this.orbiting.x, this.orbiting.y, this.distanceFromOrbiting*2);
   }
 }
 
@@ -97,11 +137,6 @@ function assignData(){
   }
 }
 
-// let sun = new Star(0, 0);
-
-// // earth.mass = 5.97, earth.diameter = 3475, earth.distanceFromSun = 149.6;
-// // earth.orbitalPeriod = 365.2, earth.orbitalVelocity = 29.8, earth.moons = 1, earth.ringSystem = false; 
-
 function preload(){
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
 }
@@ -111,27 +146,16 @@ function setup() {
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   assignData();
-  // sun.diameter = 300;
-  // earth = new Planet(1, 1, sun);
-  // earth.colour = "blue"; 
-  // earth.diameter = 3; 
-  // sun.colour = "yellow";
-  // earth.distanceFromSun = 184;
 }
-
-//0.4	68	559
 
 function draw() {
   background(0);
   orbitControl();
   for (let thePlanet of planets){
+    thePlanet.displayOrbit();
     thePlanet.display();
   }
   for (let theStar of stars){
     theStar.display();
   }
-  // sun.display();
-  // earth.display();
-  // some.display();
-  // othersome.display();
 }
