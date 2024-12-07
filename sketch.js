@@ -66,7 +66,7 @@ class Planet {
     circle(this.orbiting.x, this.orbiting.y, this.distanceFromSun*2);
   }
   createMoon(){
-    
+    let someMoon = new Moon(this); 
   }
 }
 
@@ -92,6 +92,7 @@ class Moon {
     fill(this.colour);
     circle(this.x, this.y, this.diameter);
     this.orbit(this.x, this.y);
+    this.displayOrbit();
   }
   displayOrbit() {
     smooth();
@@ -110,7 +111,10 @@ function checkForStar(body){
     console.log("No sun sorry!");
   }
 }
-
+//create different if statements for different body types 
+//Create body super class and look into sub classes 
+//create function for displaying moons and rings 
+//create a function to store my map settings to shorted setup 
 //add if statement with type 
 
 function assignData(){
@@ -146,6 +150,7 @@ function setup() {
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   assignData();
+ 
 }
 
 function draw() {
