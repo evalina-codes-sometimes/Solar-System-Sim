@@ -71,7 +71,8 @@ class Planet {
 }
 
 class Moon {
-  constructor(orbiting){
+  constructor(orbiting, earthYears){
+    this.colour = "white";
     this.astronomicalUnits = 0.002254;
     this.orbiting = orbiting;
     this.radians = 0;
@@ -79,7 +80,7 @@ class Moon {
     this.x = Math.cos(this.radians)*this.distanceFromOrbiting;
     this.y = Math.sin(this.radians)*this.distanceFromOrbiting; 
     this.mass;
-    this.diameter;
+    this.diameter = 3;
     this.orbitalPeriod = earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromOrbiting/this.orbitalPeriod;
   }
@@ -150,10 +151,10 @@ function setup() {
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   assignData();
- 
 }
 
 function draw() {
+  let theMoon = new Moon(earth, 27/365);
   background(0);
   orbitControl();
   for (let thePlanet of planets){
@@ -163,4 +164,5 @@ function draw() {
   for (let theStar of stars){
     theStar.display();
   }
+  theMoon.display();
 }
