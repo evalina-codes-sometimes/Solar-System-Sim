@@ -86,8 +86,8 @@ class Moon {
   }
   orbit(){
     this.radians += this.orbitalVelocity; 
-    this.x = Math.cos(this.radians)*this.distanceFromOrbiting;
-    this.y = Math.sin(this.radians)*this.distanceFromOrbiting; 
+    this.x = this.orbiting.x * Math.cos(this.radians)*this.distanceFromOrbiting;
+    this.y = this.orbiting.y * Math.sin(this.radians)*this.distanceFromOrbiting; 
   }
   display(){
     fill(this.colour);
@@ -154,9 +154,9 @@ function setup() {
 }
 
 function draw() {
-  let theMoon = new Moon(earth, 27/365);
   background(0);
   orbitControl();
+  let theMoon = new Moon(earth, 27/365);
   for (let thePlanet of planets){
     thePlanet.displayOrbit();
     thePlanet.display();
