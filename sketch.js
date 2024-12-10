@@ -6,7 +6,7 @@
 // - describe what you did to take this project "above and beyond"
 
 const AU = 35; 
-const EARTH_YEAR = 36500;
+const EARTH_YEAR = 365000;
 let planets = [];
 let moons = [];
 let stars = [];
@@ -28,9 +28,10 @@ class Star {
   display() {
     fill(this.colour);
     noStroke();
-    circle(this.x, this.y, this.diameter); 
+    sphere(this.diameter/2);//, this.x, this.y); 
     //rotateY(millis(1000)/36);
   }
+ 
 }
 
 class Planet {
@@ -58,6 +59,9 @@ class Planet {
     fill(this.colour);
     circle(this.x, this.y, this.diameter);
     this.orbit(this.x, this.y);
+    //translate(this.x, this.y, 0);
+
+    //sphere(this.diameter/2);
   }
   displayOrbit() {
     noFill();
@@ -72,13 +76,14 @@ class Planet {
 
 class Moon {
   constructor(orbiting, earthYears){
+    
     this.colour = "white";
     this.astronomicalUnits = 0.002254;
     this.orbiting = orbiting;
     this.radians = 0;
     this.distanceFromOrbiting = this.astronomicalUnits * AU + this.orbiting.diameter/2;
-    this.x = Math.cos(this.radians)*this.distanceFromOrbiting;
-    this.y = Math.sin(this.radians)*this.distanceFromOrbiting; 
+    this.x = this.orbiting.x + this.distanceFromOrbiting;
+    this.y = this.orbiting.y + this.distanceFromOrbiting; 
     this.mass;
     this.diameter = 3;
     this.orbitalPeriod = earthYears * EARTH_YEAR;
@@ -115,8 +120,7 @@ function checkForStar(body){
 //create different if statements for different body types 
 //Create body super class and look into sub classes 
 //create function for displaying moons and rings 
-//create a function to store my map settings to shorted setup 
-//add if statement with type 
+//create a function to store my map settings to shorten setup 
 
 function assignData(){
 //n this will work!!!!
