@@ -82,7 +82,7 @@ class Moon {
     this.orbiting = orbiting;
     this.radians = 0;
     this.distanceFromOrbiting = this.astronomicalUnits * AU + this.orbiting.diameter/2;
-    this.x = this.orbiting.x + this.distanceFromOrbiting;
+    this.x = this.orbiting.x + this.distanceFromOrbiting;                                                                            
     this.y = this.orbiting.y + this.distanceFromOrbiting; 
     this.mass;
     this.diameter = 3;
@@ -90,9 +90,11 @@ class Moon {
     this.orbitalVelocity = 2* Math.PI * this.distanceFromOrbiting/this.orbitalPeriod;
   }
   orbit(){
-    this.radians += this.orbitalVelocity; 
-    this.x = this.orbiting.x * Math.cos(this.radians)*this.distanceFromOrbiting;
-    this.y = this.orbiting.y * Math.sin(this.radians)*this.distanceFromOrbiting; 
+    this.radians += this.orbitalVelocity * this.orbiting.orbitalVelocity; 
+    this.x = Math.cos(this.orbiting.radians)*this.orbiting.distanceFromSun + Math.cos(this.radians*this.distanceFromOrbiting);
+    this.y = Math.sin(this.orbiting.radians)*this.orbiting.distanceFromSun + Math.sin(this.radians*this.distanceFromOrbiting); 
+    //This has an example of how to solve, with a very good formula. Should try it out. 
+    //https://www.google.com/search?sca_esv=6998cc71aa68975d&q=sin(x)+%2B+sin(10x)&source=lnms&fbs=AEQNm0Aa4sjWe7Rqy32pFwRj0UkWd8nbOJfsBGGB5IQQO6L3J7pRxUp2pI1mXV9fBsfh39Jw_Y7pXPv6W9UjIXzt09-YtiqJSnyznYMycaNNv7N_qyqA4nWiNpMBQ-7f5KgNVAh12h29aAKQPuzuPcMwfTQBzc1pQOFZyAaBYXuqtpmZcvsjt3wMGURkScfI-cTqUyiiBliztZhwmvMvmJMMIg2jPaA72A&sa=X&ved=2ahUKEwi21-nMwqCKAxVCATQIHer_CzsQ0pQJegQICBAB&biw=1592&bih=776&dpr=1
   }
   display(){
     fill(this.colour);
@@ -103,7 +105,7 @@ class Moon {
   displayOrbit() {
     smooth();
     noFill();
-    strokeWeight(0.25);
+    strokeWeight(0.025);
     stroke('white');
     circle(this.orbiting.x, this.orbiting.y, this.distanceFromOrbiting*2);
   }
