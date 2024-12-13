@@ -12,7 +12,7 @@ let moons = [];
 let stars = [];
 let stringFlipper = new Map();
 let theMoon;
-
+let earthTexture; 
 
 
 class Star {
@@ -57,6 +57,7 @@ class Planet {
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.radians*this.orbitalPeriod)*this.distanceFromSun;
     this.y = Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromSun; 
+    this.texture;
   }
   display(){
     // rotate(this.rotationalAxis, this.eclipticAngle);
@@ -64,6 +65,8 @@ class Planet {
     fill(this.colour);
     push();
     translate(this.x, this.y, 0);
+    // textureMode(IMAGE);
+    // texture(this.texture);
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
     pop();
@@ -167,6 +170,7 @@ function assignData(){
 
 function preload(){
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
+  earthTexture = loadImage("no_ice_clouds.jpg");
 }
 
 function setup() {
