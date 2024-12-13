@@ -6,7 +6,7 @@
 // - describe what you did to take this project "above and beyond"
 
 const AU = 35; 
-const EARTH_YEAR = 365000;
+const EARTH_YEAR = 3650000;
 let planets = [];
 let moons = [];
 let stars = [];
@@ -36,7 +36,7 @@ class Star {
 }
 
 class Planet {
-  constructor(astronomicalUnits, earthYears, orbiting){
+  constructor(astronomicalUnits, earthYears, orbiting, orbitalInclination){
     this.astronomicalUnits = astronomicalUnits;
     this.orbiting = orbiting;
     this.radians = 0;
@@ -49,6 +49,8 @@ class Planet {
     this.orbitalVelocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
     this.moons;
     this.ringSystem;
+    this.eclipticAngle = createVector(0, 0, orbitalInclination);
+    this.rotationalAxis = 0;
   }
 
   orbit(){
@@ -57,15 +59,20 @@ class Planet {
     this.y = Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromSun; 
   }
   display(){
+    // rotate(this.rotationalAxis, this.eclipticAngle);
     noStroke();
     fill(this.colour);
-    circle(this.x, this.y, this.diameter);
+    push();
+    translate(this.x, this.y, 0);
+    sphere(this.diameter/2);
     this.orbit(this.x, this.y);
+    pop();
+    //circle(this.x, this.y, this.diameter);
     //translate(this.x, this.y, 0);
 
-    //sphere(this.diameter/2);
   }
   displayOrbit() {
+    rotateZ(this.eclipticAngle);
     noFill();
     strokeWeight(0.5);
     stroke('white');
@@ -100,8 +107,15 @@ class Moon {
   }
   display(){
     fill(this.colour);
-    circle(this.x, this.y, this.diameter);
+    noStroke();
+    fill(this.colour);
+    push();
+    translate(this.x, this.y, 0);
+    sphere(this.diameter/2);
     this.orbit(this.x, this.y);
+    pop();
+    // circle(this.x, this.y, this.diameter);
+    // this.orbit(this.x, this.y);
     //this.displayOrbit();
   }
   displayOrbit() {
@@ -141,6 +155,7 @@ function assignData(){
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`); 
       tempThing.diameter = bodiesData.get(row, "diameter");
       tempThing.colour = bodiesData.get(row, "colour");
+      tempThing.eclipticAngle = bodiesData.getNum(row, "orbitalInclination");
       planets.push(tempThing);
 
     }
