@@ -72,7 +72,7 @@ class Planet {
 
   }
   displayOrbit() {
-    rotateZ(this.eclipticAngle);
+    //rotateZ(this.eclipticAngle);
     noFill();
     strokeWeight(0.5);
     stroke('white');
