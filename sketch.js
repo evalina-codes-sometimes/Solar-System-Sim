@@ -67,7 +67,10 @@ class Planet {
     push();
     translate(this.x, this.y, 0);
     // textureMode(IMAGE);
-    // texture(this.texture);
+    if (this.texture !== undefined){
+      rotateX(90);
+      texture(this.texture);
+    }
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
     pop();
@@ -105,8 +108,8 @@ class Moon {
   }
   orbit(){
     this.radians += this.orbitalVelocity; 
-    this.x = Math.cos(this.radians*this.orbitalPeriod)*this.distanceFromOrbiting + Math.cos(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun;
-    this.y = Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromOrbiting + Math.sin(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun;
+    this.x = Math.cos(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun + Math.cos(this.radians*this.orbitalPeriod)*this.distanceFromOrbiting;
+    this.y = Math.sin(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun + Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromOrbiting;
     //This has an example of how to solve, with a very good formula. Should try it out. 
     //https://www.google.com/search?sca_esv=6998cc71aa68975d&q=sin(x)+%2B+sin(10x)&source=lnms&fbs=AEQNm0Aa4sjWe7Rqy32pFwRj0UkWd8nbOJfsBGGB5IQQO6L3J7pRxUp2pI1mXV9fBsfh39Jw_Y7pXPv6W9UjIXzt09-YtiqJSnyznYMycaNNv7N_qyqA4nWiNpMBQ-7f5KgNVAh12h29aAKQPuzuPcMwfTQBzc1pQOFZyAaBYXuqtpmZcvsjt3wMGURkScfI-cTqUyiiBliztZhwmvMvmJMMIg2jPaA72A&sa=X&ved=2ahUKEwi21-nMwqCKAxVCATQIHer_CzsQ0pQJegQICBAB&biw=1592&bih=776&dpr=1
   }
@@ -180,7 +183,7 @@ function setup() {
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   assignData();
-  theMoon = new Moon(earth, -27/365);
+  theMoon = new Moon(earth, 1300);
 }
 
 function draw() {
@@ -195,3 +198,21 @@ function draw() {
   }
   theMoon.display();
 }
+
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    let dropdowns = document.getElementsByClassName("dropdown-content");
+    let i;
+    for (i = 0; i < dropdowns.length; i++) {
+      let openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+};
