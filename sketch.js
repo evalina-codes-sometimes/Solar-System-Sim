@@ -61,6 +61,7 @@ class Planet {
   }
   display(){
     // rotate(this.rotationalAxis, this.eclipticAngle);
+    rotateZ(this.rotationalAxis);
     noStroke();
     fill(this.colour);
     push();

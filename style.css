@@ -6,3 +6,11 @@ html, body {
 canvas {
   display: block;
 }
+
+ul{
+  list-style-type: none;
+  }
+button{
+  border-style: none;
+    
+}
