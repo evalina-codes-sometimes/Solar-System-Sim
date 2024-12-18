@@ -103,7 +103,7 @@ class Moon {
     this.y = this.orbiting.y + this.distanceFromOrbiting; 
     this.mass;
     this.diameter = 1;
-    this.orbitalPeriod = earthYears * EARTH_YEAR;
+    this.orbitalPeriod = this.orbiting.orbitalPeriod+ earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromOrbiting/this.orbitalPeriod;
   }
   orbit(){
@@ -183,7 +183,7 @@ function setup() {
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   assignData();
-  theMoon = new Moon(earth, 1300);
+  theMoon = new Moon(earth, 27/365);
 }
 
 function draw() {
