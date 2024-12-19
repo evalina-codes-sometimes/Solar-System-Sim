@@ -12,11 +12,22 @@ let moons = [];
 let stars = [];
 let stringFlipper = new Map();
 let theMoon;
-let earthTexture; 
+let sunTexture;
+let mercuryTexture;
+let venusTexture;
+let ceresTexture;
+let earthTexture;
+let jupiterTexture;
+let saturnTexture;
+let uranusTexture;
+let neptuneTexture;
+let plutoTexture;
+let erisTexture; 
 
 
 class Star {
   constructor(x, y) {
+    this.texture;
     this.x = x;
     this.y = y; 
     this.colour;
@@ -27,8 +38,9 @@ class Star {
   }
 
   display() {
-    fill(this.colour);
+    //fill(this.colour);
     noStroke();
+    texture(this.texture);
     sphere(this.diameter/2);//, this.x, this.y); 
     //rotateY(millis(1000)/36);
   }
@@ -51,13 +63,14 @@ class Planet {
     this.ringSystem;
     this.eclipticAngle = createVector(0, 0, orbitalInclination);
     this.rotationalAxis = 0;
+    this.texture;
   }
 
   orbit(){
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.radians*this.orbitalPeriod)*this.distanceFromSun;
     this.y = Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromSun; 
-    this.texture;
+    
   }
   display(){
     // rotate(this.rotationalAxis, this.eclipticAngle);
@@ -167,6 +180,7 @@ function assignData(){
       planets.push(tempThing);
 
     }
+    tempThing.texture = stringFlipper.get(bodiesData.get(row, theTexture));
     tempThing.diameter = bodiesData.getNum(row, "diameter"); 
     tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
     tempThing.colour = bodiesData.get(row, "colour");
@@ -175,13 +189,38 @@ function assignData(){
 
 function preload(){
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
+  sunTexture = loadImage('sunTexture.jpg');
+  mercuryTexture = loadImage('mercuryTexture.jpg');
+  venusTexture = loadImage('venusTexture.jpg');
   earthTexture = loadImage("no_ice_clouds.jpg");
+  ceresTexture = loadImage('ceresTexture.jpg');
+  jupiterTexture = loadImage('jupiterTexture.jpg');
+  saturnTexture = loadImage('saturnTexture.jpg');
+  uranusTexture = loadImage('uranusTexture.jpg');
+  neptuneTexture = loadImage('neptuneTexture.jpg');
+  plutoTexture = loadImage('plutoTexture.jpg');
+  erisTexture = loadImage('erisTexture.jpg');
+}
+
+function FlipStrings(){
+  stringFlipper.set('Star', Star);
+  stringFlipper.set('Planet', Planet);
+  stringFlipper.set('sunTexture', sunTexture);
+  stringFlipper.set('mercuryTexture', mercuryTexture);
+  stringFlipper.set('venusTexture', venusTexture);
+  stringFlipper.set('ceresTexture', ceresTexture);
+  stringFlipper.set('earthTexture', earthTexture);
+  stringFlipper.set('jupiterTexture', jupiterTexture);
+  stringFlipper.set('saturnTexture', saturnTexture);
+  stringFlipper.set('uranusTexture', uranusTexture);
+  stringFlipper.set('neptuneTexture', neptuneTexture);
+  stringFlipper.set('plutoTexture', plutoTexture);
+  stringFlipper.set('erisTexture', erisTexture);
 }
 
 function setup() {
+  FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
-  stringFlipper.set('Star', Star);
-  stringFlipper.set('Planet', Planet);
   assignData();
   theMoon = new Moon(earth, 27/365);
 }
