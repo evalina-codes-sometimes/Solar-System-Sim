@@ -93,7 +93,8 @@ class Planet {
   }
   displayOrbit() {
     //rotateZ(this.eclipticAngle);
-    rotateZ(this.rotationalAxis);
+    // rotate(this.eclipticAngle, [0, 1, 1]);
+    rotate(this.eclipticAngle, [1, 0, 1]);
     noFill();
     strokeWeight(0.5);
     stroke('white');
@@ -161,7 +162,7 @@ function checkForStar(body){
 //create function for displaying moons and rings 
 //create a function to store my map settings to shorten setup 
 
-function assignData(){
+function assignData(bodiesData){
 //n this will work!!!!
   //eval(`${bodiesData.getString(0, "theName")} = new ${stringFlipper.get(bodiesData.get(0, "type"))}();`);
   for (let row = 0; row<bodiesData.getRowCount(); row++){
@@ -180,7 +181,7 @@ function assignData(){
       planets.push(tempThing);
 
     }
-    tempThing.texture = stringFlipper.get(bodiesData.get(row, theTexture));
+    tempThing.texture = stringFlipper.get(bodiesData.getString(row, "theTexture"));
     tempThing.diameter = bodiesData.getNum(row, "diameter"); 
     tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
     tempThing.colour = bodiesData.get(row, "colour");
@@ -221,7 +222,7 @@ function FlipStrings(){
 function setup() {
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
-  assignData();
+  assignData(bodiesData);
   theMoon = new Moon(earth, 27/365);
 }
 

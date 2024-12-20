@@ -1,5 +1,5 @@
-type,theName,diameter,distAu,earthYr,colour,moons,hasrings,orbitalInclination,theTexture
-Star,sun,300,0,0.07,yellow,0,no,,sunTexture
+type,theName,diameter,distAu,earthYr,colour,moons,hasrings,orbitalInclination,theTexture,
+Star,sun,300,0,0.07,yellow,0,no,0,sunTexture
 Planet,mercury,1.05,0.4,0.24,grey,0,no,7,mercuryTexture
 Planet,venus,2.5,0.7,0.6,chocolate,0,no,3.4,venusTexture
 Planet,earth,3,1,1,blue,1,no,0,earthTexture
