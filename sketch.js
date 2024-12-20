@@ -81,7 +81,7 @@ class Planet {
     translate(this.x, this.y, 0);
     // textureMode(IMAGE);
     if (this.texture !== undefined){
-      rotateX(90);
+     // rotateX(90);
       texture(this.texture);
     }
     sphere(this.diameter/2);
