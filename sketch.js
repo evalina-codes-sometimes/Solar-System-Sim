@@ -74,7 +74,7 @@ class Planet {
   }
   display(){
     // rotate(this.rotationalAxis, this.eclipticAngle);
-    rotateZ(this.rotationalAxis);
+   // rotateZ(this.rotationalAxis);
     noStroke();
     fill(this.colour);
     push();
@@ -94,7 +94,7 @@ class Planet {
   displayOrbit() {
     //rotateZ(this.eclipticAngle);
     // rotate(this.eclipticAngle, [0, 1, 1]);
-    rotate(this.eclipticAngle, [1, 0, 1]);
+   // rotate(this.eclipticAngle, [1, 0, 1]);
     noFill();
     strokeWeight(0.5);
     stroke('white');
