@@ -41,8 +41,7 @@ class Star {
     //fill(this.colour);
     noStroke();
     texture(this.texture);
-    sphere(this.diameter/2);//, this.x, this.y); 
-    //rotateY(millis(1000)/36);
+    sphere(this.diameter/2);
   }
  
 }
@@ -81,7 +80,7 @@ class Planet {
     translate(this.x, this.y, 0);
     // textureMode(IMAGE);
     if (this.texture !== undefined){
-     // rotateX(90);
+     rotateX(90);
       texture(this.texture);
     }
     sphere(this.diameter/2);
@@ -93,8 +92,8 @@ class Planet {
   }
   displayOrbit() {
     //rotateZ(this.eclipticAngle);
-    // rotate(this.eclipticAngle, [0, 1, 1]);
-   // rotate(this.eclipticAngle, [1, 0, 1]);
+    rotate(this.eclipticAngle, [0, 1, 1]);
+    //rotate(this.eclipticAngle, [1, 0, 1]);
     noFill();
     strokeWeight(0.5);
     stroke('white');
@@ -222,6 +221,7 @@ function FlipStrings(){
 function setup() {
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
+  debugMode(GRID);
   assignData(bodiesData);
   theMoon = new Moon(earth, 27/365);
 }
