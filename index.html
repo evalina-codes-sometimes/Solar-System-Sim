@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!--Display drop down of planetary bodies in system, buttons will open a pop up with info on the body.-->
   <h4><ul>
   <div class="dropdown">
     <button onclick="myFunction()" class="dropbtn">Planets</button>
@@ -9,14 +10,25 @@
       <a href="#">Earth</a>
     </div>
   </div>
-</ul>
-</h4>
+</ul></h4>
+
+
+<label class="switch">
+ <input type="checkbox" id="toggleOrbitLines"> Display Orbits 
+ <span class="slider round"></span> 
+ <span ></span> 
+ <span onclick="toggleOrbitLines()"></span>
+  <!--<span ></span>-->
+</label>
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!--Name the tab-->
     <title>Solar System Simulation</title>
 
+    <!--Add an icon to the tab-->
     <link rel-="icon" type+="image/x-icon" href="/images/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="style.css">

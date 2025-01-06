@@ -11,6 +11,7 @@ let planets = [];
 let moons = [];
 let stars = [];
 let stringFlipper = new Map();
+let showOrbits = true;
 let theMoon;
 let sunTexture;
 let mercuryTexture;
@@ -66,6 +67,7 @@ class Planet {
   }
 
   orbit(){
+    rotate(this.eclipticAngle, [0, 1, 1]);
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.radians*this.orbitalPeriod)*this.distanceFromSun;
     this.y = Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromSun; 
@@ -73,16 +75,18 @@ class Planet {
   }
   display(){
     // rotate(this.rotationalAxis, this.eclipticAngle);
-   // rotateZ(this.rotationalAxis);
+    // rotateZ(this.rotationalAxis);
     noStroke();
     fill(this.colour);
     push();
     translate(this.x, this.y, 0);
     // textureMode(IMAGE);
-    if (this.texture !== undefined){
-     rotateX(90);
-      texture(this.texture);
-    }
+    // if (this.texture !== undefined){
+    //   rotateX(90);
+    //   texture(this.texture);
+    // }
+    
+   
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
     pop();
@@ -98,6 +102,7 @@ class Planet {
     strokeWeight(0.5);
     stroke('white');
     circle(this.orbiting.x, this.orbiting.y, this.distanceFromSun*2);
+    
   }
   createMoon(){
     let someMoon = new Moon(this); 
@@ -230,8 +235,10 @@ function draw() {
   background(0);
   orbitControl();
   for (let thePlanet of planets){
-    thePlanet.displayOrbit();
     thePlanet.display();
+    if (showOrbits){
+      thePlanet.displayOrbit();
+    }
   }
   for (let theStar of stars){
     theStar.display();
@@ -256,3 +263,7 @@ window.onclick = function(event) {
     }
   }
 };
+
+function toggleOrbitLines(){
+  showOrbits = !showOrbits;
+}
