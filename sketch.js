@@ -67,7 +67,6 @@ class Planet {
   }
 
   orbit(){
-    rotate(this.eclipticAngle, [0, 1, 1]);
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.radians*this.orbitalPeriod)*this.distanceFromSun;
     this.y = Math.sin(this.radians*this.orbitalPeriod)*this.distanceFromSun; 
@@ -88,6 +87,7 @@ class Planet {
     
    
     sphere(this.diameter/2);
+    rotate(this.eclipticAngle, [1, 0, 1]);
     this.orbit(this.x, this.y);
     pop();
     //circle(this.x, this.y, this.diameter);
