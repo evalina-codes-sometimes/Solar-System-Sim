@@ -13,17 +13,17 @@ let stars = [];
 let stringFlipper = new Map();
 let showOrbits = true;
 let theMoon;
-let sunTexture;
-let mercuryTexture;
-let venusTexture;
-let ceresTexture;
-let earthTexture;
-let jupiterTexture;
-let saturnTexture;
-let uranusTexture;
-let neptuneTexture;
-let plutoTexture;
-let erisTexture; 
+let sunTexture; let sun;
+let mercuryTexture; let mercury;
+let venusTexture; let venus;
+let ceresTexture; let ceres; 
+let earthTexture; let earth; 
+let jupiterTexture; let jupiter; 
+let saturnTexture; let saturn;
+let uranusTexture; let uranus;
+let neptuneTexture; let neptune; 
+let plutoTexture; let pluto;
+let erisTexture; let eris; 
 
 
 class Star {
@@ -79,15 +79,15 @@ class Planet {
     fill(this.colour);
     push();
     translate(this.x, this.y, 0);
-    // textureMode(IMAGE);
+    
     // if (this.texture !== undefined){
     //   rotateX(90);
     //   texture(this.texture);
     // }
     
-   
+    texture(this.texture);
     sphere(this.diameter/2);
-    rotate(this.eclipticAngle, [1, 0, 1]);
+    //rotate(this.eclipticAngle, [1, 0, 1]);
     this.orbit(this.x, this.y);
     pop();
     //circle(this.x, this.y, this.diameter);
@@ -96,7 +96,7 @@ class Planet {
   }
   displayOrbit() {
     //rotateZ(this.eclipticAngle);
-    rotate(this.eclipticAngle, [0, 1, 1]);
+    //rotate(this.eclipticAngle, [0, 1, 1]);
     //rotate(this.eclipticAngle, [1, 0, 1]);
     noFill();
     strokeWeight(0.5);
@@ -172,12 +172,14 @@ function assignData(bodiesData){
   for (let row = 0; row<bodiesData.getRowCount(); row++){
     let tempThing;
     if (bodiesData.get(row, "type") === "Star"){
+      console.log(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
       tempThing.diameter = bodiesData.get(row, "diamteter"); 
       tempThing.colour = bodiesData.get(row, "colour"); 
       stars.push(tempThing);
     }
     else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
+      console.log(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`)
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`); 
       tempThing.diameter = bodiesData.get(row, "diameter");
       tempThing.colour = bodiesData.get(row, "colour");
@@ -210,23 +212,24 @@ function preload(){
 function FlipStrings(){
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
-  stringFlipper.set('sunTexture', sunTexture);
-  stringFlipper.set('mercuryTexture', mercuryTexture);
-  stringFlipper.set('venusTexture', venusTexture);
-  stringFlipper.set('ceresTexture', ceresTexture);
-  stringFlipper.set('earthTexture', earthTexture);
-  stringFlipper.set('jupiterTexture', jupiterTexture);
-  stringFlipper.set('saturnTexture', saturnTexture);
-  stringFlipper.set('uranusTexture', uranusTexture);
-  stringFlipper.set('neptuneTexture', neptuneTexture);
-  stringFlipper.set('plutoTexture', plutoTexture);
-  stringFlipper.set('erisTexture', erisTexture);
+  stringFlipper.set('sunTexture', sunTexture); stringFlipper.set("sun", sun);
+  stringFlipper.set('mercuryTexture', mercuryTexture); stringFlipper.set("mercury", mercury);
+  stringFlipper.set('venusTexture', venusTexture); stringFlipper.set('venus', venus);
+  stringFlipper.set('ceresTexture', ceresTexture); stringFlipper.set('ceres', ceres);
+  stringFlipper.set('earthTexture', earthTexture); stringFlipper.set('earth', earth);
+  stringFlipper.set('jupiterTexture', jupiterTexture); stringFlipper.set('jupiter', jupiter);
+  stringFlipper.set('saturnTexture', saturnTexture); stringFlipper.set('saturn', saturn);
+  stringFlipper.set('uranusTexture', uranusTexture); stringFlipper.set('uranus', uranus);
+  stringFlipper.set('neptuneTexture', neptuneTexture); stringFlipper.set('neptune'. neptune);
+  stringFlipper.set('plutoTexture', plutoTexture); stringFlipper.set('pluto', pluto);
+  stringFlipper.set('erisTexture', erisTexture); stringFlipper.set('eris', eris);
 }
 
 function setup() {
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
   debugMode(GRID);
+  textureMode(NORMAL);
   assignData(bodiesData);
   theMoon = new Moon(earth, 27/365);
 }
