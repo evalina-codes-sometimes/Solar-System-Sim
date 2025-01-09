@@ -49,21 +49,21 @@ class Star {
 
 class Planet {
   constructor(astronomicalUnits, earthYears, orbiting, orbitalInclination){
-    this.astronomicalUnits = astronomicalUnits;
+    this.mass;
+    this.texture;
+    this.diameter;
+    this.ringSystem;
+    this.moons;
     this.orbiting = orbiting;
+    this.astronomicalUnits = astronomicalUnits;
     this.radians = 0;
+    this.rotationalAxis = 0;
     this.distanceFromSun = this.astronomicalUnits * AU + this.orbiting.diameter/2;
     this.x = Math.cos(this.radians)*this.distanceFromSun;
     this.y = Math.sin(this.radians)*this.distanceFromSun; 
-    this.mass;
-    this.diameter;
     this.orbitalPeriod = earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
-    this.moons;
-    this.ringSystem;
     this.eclipticAngle = createVector(0, 0, orbitalInclination);
-    this.rotationalAxis = 0;
-    this.texture;
   }
 
   orbit(){
@@ -105,7 +105,7 @@ class Planet {
     
   }
   createMoon(){
-    let someMoon = new Moon(this); 
+    let someMoon = new Moon(this, 5); 
   }
 }
 
@@ -167,30 +167,39 @@ function checkForStar(body){
 //create a function to store my map settings to shorten setup 
 
 function assignData(bodiesData){
-//n this will work!!!!
+  console.log("hello");
+  //n this will work!!!!
   //eval(`${bodiesData.getString(0, "theName")} = new ${stringFlipper.get(bodiesData.get(0, "type"))}();`);
   for (let row = 0; row<bodiesData.getRowCount(); row++){
+    // console.log(row);
     let tempThing;
     if (bodiesData.get(row, "type") === "Star"){
-      console.log(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
+      // console.log(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
       tempThing.diameter = bodiesData.get(row, "diamteter"); 
       tempThing.colour = bodiesData.get(row, "colour"); 
-      stars.push(tempThing);
+      // stars.push(tempThing);
+      console.log("star made");
     }
     else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
-      console.log(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`)
+      console.log(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`);
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`); 
       tempThing.diameter = bodiesData.get(row, "diameter");
       tempThing.colour = bodiesData.get(row, "colour");
       tempThing.eclipticAngle = bodiesData.getNum(row, "orbitalInclination");
-      planets.push(tempThing);
+      // planets.push(tempThing);
 
     }
     tempThing.texture = stringFlipper.get(bodiesData.getString(row, "theTexture"));
     tempThing.diameter = bodiesData.getNum(row, "diameter"); 
     tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
     tempThing.colour = bodiesData.get(row, "colour");
+    if (bodiesData.get(row, 'type') === "Planet"){ 
+      planets.push(tempThing);
+    }
+    if (bodiesData.get(row, 'type') === "Star"){ 
+      stars.push(tempThing);
+    }
   }
 }
 
@@ -229,9 +238,8 @@ function setup() {
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
   debugMode(GRID);
-  textureMode(NORMAL);
   assignData(bodiesData);
-  theMoon = new Moon(earth, 27/365);
+  // theMoon = new Moon(earth, 27/365);
 }
 
 function draw() {
@@ -246,7 +254,7 @@ function draw() {
   for (let theStar of stars){
     theStar.display();
   }
-  theMoon.display();
+  // theMoon.display();
 }
 
 function myFunction() {
@@ -267,6 +275,6 @@ window.onclick = function(event) {
   }
 };
 
-function toggleOrbitLines(){
-  showOrbits = !showOrbits;
-}
+// function toggleOrbitLines(){
+//   showOrbits = !showOrbits;
+// }
