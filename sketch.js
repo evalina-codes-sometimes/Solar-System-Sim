@@ -80,6 +80,7 @@ class Planet {
     fill(this.colour);
     push();
     translate(this.x, this.y, 0);
+    this.displayRings();
     this.rotateOnAxis();
     // textureMode(IMAGE);
     if (this.texture !== undefined){
@@ -91,6 +92,14 @@ class Planet {
     pop();
     //circle(this.x, this.y, this.diameter);
     //translate(this.x, this.y, 0);
+  }
+  displayRings(){
+    if (this.ringSystem === true){
+      fill('pink');
+      torus(15.7, 1.789746, 24, 2);
+      fill('brown');
+      torus(17.55833+2*4.07267, 4.07267, 24, 2);
+    }
   }
   displayOrbit() {
     //rotateZ(this.eclipticAngle);
@@ -179,6 +188,7 @@ function assignData(bodiesData){
     }
     else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar(), bodiesData.getNum(row, "orbitalInclination"), bodiesData.getNum(row, "dayLength"));`); 
+      tempThing.ringSystem = stringFlipper.get(bodiesData.get(row, 'hasrings'));
       tempThing.diameter = bodiesData.get(row, "diameter");
       tempThing.colour = bodiesData.get(row, "colour");
       tempThing.eclipticAngle = bodiesData.getNum(row, "orbitalInclination");
@@ -222,6 +232,8 @@ function FlipStrings(){
   stringFlipper.set('neptuneTexture', neptuneTexture);
   stringFlipper.set('plutoTexture', plutoTexture);
   stringFlipper.set('erisTexture', erisTexture);
+  stringFlipper.set('no', false);
+  stringFlipper.set('yes', true);
 }
 function setup() {
   FlipStrings();
