@@ -6,6 +6,7 @@
 // - describe what you did to take this project "above and beyond"
 const AU = 35; 
 const EARTH_YEAR = 3650000;
+const EARTH_DAY = 1;
 let planets = [];
 let moons = [];
 let stars = [];
@@ -23,7 +24,7 @@ let neptuneTexture;
 let plutoTexture;
 let erisTexture; 
 class Star {
-  constructor(x, y) {
+  constructor(x, y, earthDays) {
     this.texture;
     this.x = x;
     this.y = y; 
@@ -32,18 +33,23 @@ class Star {
     this.diameter;
     this.surfaceTemp;
     this.brightness; 
+    this.day = EARTH_DAY * earthDays;
   }
   display() {
     //fill(this.colour);
     noStroke();
+    this.rotateOnAxis();
+    rotateX(1.5708);
     texture(this.texture);
     sphere(this.diameter/2);//, this.x, this.y); 
     //rotateY(millis(1000)/36);
   }
- 
+  rotateOnAxis() {
+    rotate(frameCount /this.day);
+  }
 }
 class Planet {
-  constructor(astronomicalUnits, earthYears, orbiting, orbitalInclination){
+  constructor(astronomicalUnits, earthYears, orbiting, orbitalInclination, earthDays){
     this.astronomicalUnits = astronomicalUnits;
     this.orbiting = orbiting;
     this.radians = 0;
@@ -59,6 +65,7 @@ class Planet {
     this.eclipticAngle = createVector(0, 0, orbitalInclination);
     this.rotationalAxis = 0;
     this.texture;
+    this.day = EARTH_DAY*earthDays;
   }
   orbit(){
     this.radians += this.orbitalVelocity; 
@@ -73,9 +80,10 @@ class Planet {
     fill(this.colour);
     push();
     translate(this.x, this.y, 0);
+    this.rotateOnAxis();
     // textureMode(IMAGE);
     if (this.texture !== undefined){
-      rotateX(90);
+      rotateX(1.5708);
       texture(this.texture);
     }
     sphere(this.diameter/2);
@@ -93,6 +101,9 @@ class Planet {
     strokeWeight(0.5);
     stroke('white');
     circle(this.orbiting.x, this.orbiting.y, this.distanceFromSun*2);
+  }
+  rotateOnAxis() {
+    rotate(frameCount /this.day);
   }
   createMoon(){
     let someMoon = new Moon(this); 
@@ -114,7 +125,7 @@ class Moon {
     this.orbitalVelocity = 2* Math.PI * this.distanceFromOrbiting/this.orbitalPeriod;
   }
   orbit(){
-    rotate(this.orbiting.eclipticAngle, [1, 0, 1]);
+    // rotate(this.orbiting.orbitalInclination, [1, 0, 1]);
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun + Math.cos(this.radians*Math.PI/this.orbitalPeriod)*this.distanceFromOrbiting;
     this.y = Math.sin(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun + Math.sin(this.radians*Math.PI/this.orbitalPeriod)*this.distanceFromOrbiting;
@@ -161,13 +172,13 @@ function assignData(bodiesData){
   for (let row = 0; row<bodiesData.getRowCount(); row++){
     let tempThing;
     if (bodiesData.get(row, "type") === "Star"){
-      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0);`);
+      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0, bodiesData.getNum(row, "dayLength"));`);
       tempThing.diameter = bodiesData.get(row, "diamteter"); 
       tempThing.colour = bodiesData.get(row, "colour"); 
       stars.push(tempThing);
     }
     else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
-      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar());`); 
+      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar(), bodiesData.getNum(row, "orbitalInclination"), bodiesData.getNum(row, "dayLength"));`); 
       tempThing.diameter = bodiesData.get(row, "diameter");
       tempThing.colour = bodiesData.get(row, "colour");
       tempThing.eclipticAngle = bodiesData.getNum(row, "orbitalInclination");
@@ -182,10 +193,12 @@ function assignData(bodiesData){
 }
 function preload(){
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
+  theBackground = loadImage('background.png');
   sunTexture = loadImage('sunTexture.png');
   mercuryTexture = loadImage('mercuryTexture.png');
   venusTexture = loadImage('venusTexture.png');
   earthTexture = loadImage("earthTexture.png");
+  marsTexture = loadImage("marsTexture.png");
   ceresTexture = loadImage('ceresTexture.png');
   jupiterTexture = loadImage('jupiterTexture.png');
   saturnTexture = loadImage('saturnTexture.png');
@@ -202,6 +215,7 @@ function FlipStrings(){
   stringFlipper.set('venusTexture', venusTexture);
   stringFlipper.set('ceresTexture', ceresTexture);
   stringFlipper.set('earthTexture', earthTexture);
+  stringFlipper.set('marsTexture', marsTexture);
   stringFlipper.set('jupiterTexture', jupiterTexture);
   stringFlipper.set('saturnTexture', saturnTexture);
   stringFlipper.set('uranusTexture', uranusTexture);
@@ -222,6 +236,7 @@ function draw() {
   for (let thePlanet of planets){
     thePlanet.displayOrbit();
     thePlanet.display();
+    // thePlanet.rotateOnAxis();
   }
   for (let theStar of stars){
     theStar.display();
