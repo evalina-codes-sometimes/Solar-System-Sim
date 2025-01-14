@@ -39,7 +39,7 @@ class Star {
     //fill(this.colour);
     noStroke();
     this.rotateOnAxis();
-    rotateX(1.5708);
+    rotateY(1.5708*2);
     texture(this.texture);
     sphere(this.diameter/2);//, this.x, this.y); 
     //rotateY(millis(1000)/36);
@@ -89,7 +89,7 @@ class Planet {
     }
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
-    pop();
+     
     //circle(this.x, this.y, this.diameter);
     //translate(this.x, this.y, 0);
   }
@@ -146,13 +146,10 @@ class Moon {
     noStroke();
     fill(this.colour);
     push();
-    translate(this.x, this.y, 0);
+    translate(this.orbiting.x, this.orbiting.y, 0);
     sphere(this.diameter/2);
-    this.orbit(this.x, this.y);
+    this.orbit();
     pop();
-    // circle(this.x, this.y, this.diameter);
-    // this.orbit(this.x, this.y);
-    //this.displayOrbit();
   }
   displayOrbit() {
     smooth();
@@ -176,16 +173,18 @@ function checkForStar(body){
 //create a function to store my map settings to shorten setup 
 
 function assignData(bodiesData){
-//n this will work!!!!
-  //eval(`${bodiesData.getString(0, "theName")} = new ${stringFlipper.get(bodiesData.get(0, "type"))}();`);
+  //Iterate through rows
   for (let row = 0; row<bodiesData.getRowCount(); row++){
+    //assign temporary variable
     let tempThing;
+    //Create stars
     if (bodiesData.get(row, "type") === "Star"){
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0, bodiesData.getNum(row, "dayLength"));`);
       tempThing.diameter = bodiesData.get(row, "diamteter"); 
       tempThing.colour = bodiesData.get(row, "colour"); 
       stars.push(tempThing);
     }
+
     else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar(), bodiesData.getNum(row, "orbitalInclination"), bodiesData.getNum(row, "dayLength"));`); 
       tempThing.ringSystem = stringFlipper.get(bodiesData.get(row, 'hasrings'));
@@ -202,6 +201,7 @@ function assignData(bodiesData){
   }
 }
 function preload(){
+  //Prepare all images and the data sheet to be used 
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
   theBackground = loadImage('background.png');
   sunTexture = loadImage('sunTexture.png');
@@ -218,6 +218,7 @@ function preload(){
   erisTexture = loadImage('erisTexture.png');
 }
 function FlipStrings(){
+  //Map vairable names form data sheet and class types
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   stringFlipper.set('sunTexture', sunTexture);
@@ -236,6 +237,9 @@ function FlipStrings(){
   stringFlipper.set('yes', true);
 }
 function setup() {
+  //Display instructions
+  window.alert("use mouse to pan");
+  //get everything set up 
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
   assignData(bodiesData);
@@ -244,30 +248,15 @@ function setup() {
 
 function draw() {
   background(0);
+  //built into p5js, allows for 3D panning 
   orbitControl();
+  //Execute functions by class type
   for (let thePlanet of planets){
     thePlanet.displayOrbit();
     thePlanet.display();
-    // thePlanet.rotateOnAxis();
   }
   for (let theStar of stars){
     theStar.display();
   }
   theMoon.display();
 }
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-// Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    let dropdowns = document.getElementsByClassName("dropdown-content");
-    let i;
-    for (i = 0; i < dropdowns.length; i++) {
-      let openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-};
