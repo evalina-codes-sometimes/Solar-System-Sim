@@ -39,7 +39,7 @@ class Star {
     //fill(this.colour);
     noStroke();
     this.rotateOnAxis();
-    rotateX(1.5708*2);
+    //rotateX(1.5708*2);
     texture(this.texture);
     sphere(this.diameter/2);//, this.x, this.y); 
     //rotateY(millis(1000)/36);
@@ -95,9 +95,9 @@ class Planet {
   }
   displayRings(){
     if (this.ringSystem === true){
-      fill('pink');
+      fill('lightBrown');
       torus(15.7, 1.789746, 24, 2);
-      fill('brown');
+      fill('grey');
       torus(17.55833+2*4.07267, 4.07267, 24, 2);
     }
   }
@@ -185,7 +185,7 @@ function assignData(bodiesData){
       stars.push(tempThing);
     }
 
-    else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object
+    else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object,    orbital inclination,                         day length
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar(), bodiesData.getNum(row, "orbitalInclination"), bodiesData.getNum(row, "dayLength"));`); 
       tempThing.ringSystem = stringFlipper.get(bodiesData.get(row, 'hasrings'));
       tempThing.diameter = bodiesData.get(row, "diameter");
@@ -238,18 +238,20 @@ function FlipStrings(){
 }
 function setup() {
   //Display instructions
-  window.alert("use mouse to pan");
+  window.alert("Right-click to rotate, left-click to pan.");
   //get everything set up 
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
   assignData(bodiesData);
-  theMoon = new Moon(earth, 27/365);
+  //theMoon = new Moon(earth, 27/365);
 }
 
 function draw() {
   background(0);
+  
   //built into p5js, allows for 3D panning 
   orbitControl();
+
   //Execute functions by class type
   for (let thePlanet of planets){
     thePlanet.displayOrbit();
@@ -258,5 +260,5 @@ function draw() {
   for (let theStar of stars){
     theStar.display();
   }
-  theMoon.display();
+  //theMoon.display();
 }
