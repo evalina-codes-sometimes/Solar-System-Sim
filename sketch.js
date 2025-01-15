@@ -238,7 +238,7 @@ function FlipStrings(){
 }
 function setup() {
   //Display instructions
-  window.alert("Right-click to rotate, left-click to pan.");
+  window.alert("Left-click to rotate, right-click to pan.");
   //get everything set up 
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -248,7 +248,7 @@ function setup() {
 
 function draw() {
   background(0);
-  
+
   //built into p5js, allows for 3D panning 
   orbitControl();
 
