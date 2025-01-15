@@ -39,7 +39,7 @@ class Star {
     //fill(this.colour);
     noStroke();
     this.rotateOnAxis();
-    rotateY(1.5708*2);
+    rotateX(1.5708*2);
     texture(this.texture);
     sphere(this.diameter/2);//, this.x, this.y); 
     //rotateY(millis(1000)/36);
@@ -89,7 +89,7 @@ class Planet {
     }
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
-     
+    pop();
     //circle(this.x, this.y, this.diameter);
     //translate(this.x, this.y, 0);
   }
