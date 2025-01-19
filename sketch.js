@@ -58,6 +58,7 @@ class Planet {
     this.y = Math.sin(this.radians)*this.distanceFromSun; 
     this.mass;
     this.diameter;
+    this.name;
     this.orbitalPeriod = earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
     this.moons;
@@ -66,6 +67,7 @@ class Planet {
     this.rotationalAxis = 0;
     this.texture;
     this.day = EARTH_DAY*earthDays;
+    this.rings = assignData(ringData, this);
   }
   orbit(){
     this.radians += this.orbitalVelocity; 
@@ -80,26 +82,23 @@ class Planet {
     fill(this.colour);
     push();
     translate(this.x, this.y, 0);
-    this.displayRings();
+    // this.displayRings();
     this.rotateOnAxis();
     // textureMode(IMAGE);
     if (this.texture !== undefined){
       rotateX(1.5708);
       texture(this.texture);
     }
+    if (this.ringSystem){
+      for (theRing in this.rings){
+        theRing.display();
+      }
+    }
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
     pop();
     //circle(this.x, this.y, this.diameter);
     //translate(this.x, this.y, 0);
-  }
-  displayRings(){
-    if (this.ringSystem === true){
-      fill('lightBrown');
-      torus(15.7, 1.789746, 24, 2);
-      fill('grey');
-      torus(17.55833+2*4.07267, 4.07267, 24, 2);
-    }
   }
   displayOrbit() {
     //rotateZ(this.eclipticAngle);
@@ -114,6 +113,11 @@ class Planet {
   rotateOnAxis() {
     rotate(frameCount /this.day);
   }
+  // assignRings(){
+  //   if (this.ringSystem === true){
+  //    this.rings = assignData(ringData, this);
+  //   }
+  // }
   createMoon(){
     let someMoon = new Moon(this); 
   }
@@ -159,6 +163,22 @@ class Moon {
     circle(this.orbiting.x, this.orbiting.y, this.distanceFromOrbiting*2);
   }
 }
+
+class Ring{
+  constructor(surrounding){
+    this.surrounding = surrounding;
+    this.ringRadius;
+    this.ringTubeRadius;
+    this.r;
+    this.g;
+    this.b;
+  }
+  display(){
+    fill(this.r, this.g, this.b);
+    torus(this.ringRadius, this.ringTubeRadius, 24, 2);
+  }
+}
+
 function checkForStar(body){
   if (stars.includes(sun)){
     return sun;
@@ -172,36 +192,60 @@ function checkForStar(body){
 //create function for displaying moons and rings 
 //create a function to store my map settings to shorten setup 
 
-function assignData(bodiesData){
+function assignData(dataSheet, connectedThing){
   //Iterate through rows
-  for (let row = 0; row<bodiesData.getRowCount(); row++){
-    //assign temporary variable
+  if (dataSheet === bodiesData){
+
+    for (let row = 0; row<dataSheet.getRowCount(); row++){
+      //assign temporary variable
+      let tempThing;
+      //Create stars
+      if (dataSheet.get(row, "type") === "Star"){
+        tempThing = eval(`${dataSheet.get(row, "theName")} = new ${stringFlipper.get(dataSheet.get(row, "type"))}(0,0, dataSheet.getNum(row, "dayLength"));`);
+        tempThing.diameter = dataSheet.get(row, "diamteter"); 
+        tempThing.colour = dataSheet.get(row, "colour"); 
+        stars.push(tempThing);
+      }
+  
+      else if (dataSheet.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object,    orbital inclination,                         day length
+        tempThing = eval(`${dataSheet.get(row, "theName")} = new ${stringFlipper.get(dataSheet.get(row, "type"))}(dataSheet.getNum(row, "distAu"), dataSheet.getNum(row, "earthYr"), checkForStar(), dataSheet.getNum(row, "orbitalInclination"), dataSheet.getNum(row, "dayLength"));`); 
+        tempThing.ringSystem = stringFlipper.get(dataSheet.get(row, 'hasrings'));
+        tempThing.diameter = dataSheet.get(row, "diameter");
+        tempThing.colour = dataSheet.get(row, "colour");
+        tempThing.eclipticAngle = dataSheet.getNum(row, "orbitalInclination");
+        planets.push(tempThing);
+  
+      }
+      tempThing.name = dataSheet.get(row, 'theName');
+      tempThing.texture = stringFlipper.get(dataSheet.getString(row, "theTexture"));
+      tempThing.diameter = dataSheet.getNum(row, "diameter"); 
+      tempThing.orbitalPeriod = dataSheet.getNum(row, "earthYr");
+      tempThing.colour = dataSheet.get(row, "colour");
+    }
+  }
+  if (dataSheet === ringData){
+    let tempArray = [];
     let tempThing;
-    //Create stars
-    if (bodiesData.get(row, "type") === "Star"){
-      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(0,0, bodiesData.getNum(row, "dayLength"));`);
-      tempThing.diameter = bodiesData.get(row, "diamteter"); 
-      tempThing.colour = bodiesData.get(row, "colour"); 
-      stars.push(tempThing);
-    }
+    for (let thing = 0; dataSheet.getRowCount(); thing++){
+      
+      console.log('where is it breaking');
+      if (dataSheet.get(thing, 'surrounding') === connectedThing.name){
 
-    else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object,    orbital inclination,                         day length
-      tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar(), bodiesData.getNum(row, "orbitalInclination"), bodiesData.getNum(row, "dayLength"));`); 
-      tempThing.ringSystem = stringFlipper.get(bodiesData.get(row, 'hasrings'));
-      tempThing.diameter = bodiesData.get(row, "diameter");
-      tempThing.colour = bodiesData.get(row, "colour");
-      tempThing.eclipticAngle = bodiesData.getNum(row, "orbitalInclination");
-      planets.push(tempThing);
-
+        tempThing = eval(`${dataSheet.get(thing, "ringName")} = new ${stringFlipper.get(dataSheet.get(thing, "class"))}(connectedThing);`);
+        tempThing.ringRadius = dataSheet.getNum(thing, 'ringRadius');
+        tempThing.ringTubeRadius = dataSheet.getNum(thing, 'ringTubeRadius');
+        tempThing.r = dataSheet.getNum(thing, 'r');
+        tempThing.g = dataSheet.getNum(thing, 'g');
+        tempThing.b = dataSheet.getNum(thing, 'b');
+        tempArray.push(tempThing); 
+      }
     }
-    tempThing.texture = stringFlipper.get(bodiesData.getString(row, "theTexture"));
-    tempThing.diameter = bodiesData.getNum(row, "diameter"); 
-    tempThing.orbitalPeriod = bodiesData.getNum(row, "earthYr");
-    tempThing.colour = bodiesData.get(row, "colour");
+    return tempArray;
   }
 }
 function preload(){
   //Prepare all images and the data sheet to be used 
+  ringData = loadTable('RingDataSheet.csv', 'csv', 'header');
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
   theBackground = loadImage('background.png');
   sunTexture = loadImage('sunTexture.png');
@@ -219,6 +263,7 @@ function preload(){
 }
 function FlipStrings(){
   //Map vairable names form data sheet and class types
+  stringFlipper.set('Ring', Ring);
   stringFlipper.set('Star', Star);
   stringFlipper.set('Planet', Planet);
   stringFlipper.set('sunTexture', sunTexture);
@@ -235,6 +280,10 @@ function FlipStrings(){
   stringFlipper.set('erisTexture', erisTexture);
   stringFlipper.set('no', false);
   stringFlipper.set('yes', true);
+  // stringFlipper.set(jupiter, 'jupiter');
+  // stringFlipper.set(saturn, 'saturn');
+  // stringFlipper.set(uranus, 'uranus');
+  // stringFlipper.set(neptune, 'neptune')
 }
 function setup() {
   //Display instructions
@@ -243,6 +292,11 @@ function setup() {
   FlipStrings();
   createCanvas(windowWidth, windowHeight, WEBGL);
   assignData(bodiesData);
+  for (thePlanet in planets){
+    if (thePlanet.ringSystem){
+      thePlanet.assignRings(ringData, thePlanet);
+    }
+  }
   //theMoon = new Moon(earth, 27/365);
 }
 

@@ -1,11 +1,11 @@
-# Individual skilled in Computer Science
+# Individual familiar with Computer Science
 - Fix moons and rings
 - Include some instructions for controls
 - Add a way of ooming in on a body
 - Clean display code
 - "It's neat"
 
-# Individual not skilled in Computer Science
+# Individual not familiar with Computer Science
 - Make orbit lines a bit rounder 
 - "Earth is so small" 
 - "Looks like a passing grade" 
