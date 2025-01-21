@@ -130,7 +130,7 @@ class Planet {
   }
   assignRings(){
     if (this.ringSystem){
-      this.rings.push(assignRingData(ringData, this));
+      this.rings.push(assignRingData(ringData, toString(this)));
     }
   }
   createMoon(){
@@ -221,7 +221,6 @@ function assignData(bodiesData){
       stars.push(tempThing);
     }
     else if (bodiesData.get(row, 'type') === "Planet"){  //      class Type                                        dist AU,                         Earth Years,                       orbiting object,    orbital inclination,                         day length
-      console.log('hey');
       tempThing = eval(`${bodiesData.get(row, "theName")} = new ${stringFlipper.get(bodiesData.get(row, "type"))}(bodiesData.getNum(row, "distAu"), bodiesData.getNum(row, "earthYr"), checkForStar(), bodiesData.getNum(row, "orbitalInclination"), bodiesData.getNum(row, "dayLength"));`); 
       tempThing.ringSystem = stringFlipper.get(bodiesData.get(row, 'hasrings'));
       tempThing.diameter = bodiesData.get(row, "diameter");
@@ -239,18 +238,22 @@ function assignData(bodiesData){
 //Attempt at recreation of assign bodies data but for rings, it is breaking somewhere... :(
 function assignRingData(ringData, connectedThing){
   let tempArray = [];
+  console.log('whyyyy');
   for (let row = 0; ringData.getRowCount(); row++){
+    console.log('here?');
+    if (ringData.getString(row, 'surrounding') === toString(connectedThing)){
+      console.log('where is it breaking');
+      let tempThing;
       
-    let tempThing;
-    console.log('where is it breaking');
-   
-    tempThing = eval(`${ringData.get(row, "ringName")} = new ${stringFlipper.get(ringData.getString(row, "class"))}(connectedThing);`);
-    tempThing.ringRadius = ringData.getNum(row, 'ringRadius');
-    tempThing.ringTubeRadius = ringData.getNum(row, 'ringTubeRadius');
-    tempThing.r = ringData.getNum(row, 'r');
-    tempThing.g = ringData.getNum(row, 'g');
-    tempThing.b = ringData.getNum(row, 'b');
-    tempArray.push(tempThing); 
+      tempThing = eval(`${ringData.get(row, "ringName")} = new ${stringFlipper.get(ringData.getString(row, "class"))}(connectedThing);`);
+      tempThing.ringRadius = ringData.getNum(row, 'ringRadius');
+      tempThing.ringTubeRadius = ringData.getNum(row, 'ringTubeRadius');
+      tempThing.r = ringData.getNum(row, 'r');
+      tempThing.g = ringData.getNum(row, 'g');
+      tempThing.b = ringData.getNum(row, 'b');
+      tempArray.push(tempThing); 
+
+    } 
     
   }
   return tempArray;
