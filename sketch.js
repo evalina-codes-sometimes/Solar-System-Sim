@@ -12,6 +12,7 @@ let moons = [];
 let stars = [];
 let stringFlipper = new Map();
 let theMoon;
+let bg;
 let sunTexture;
 let mercuryTexture;
 let venusTexture;
@@ -23,6 +24,8 @@ let uranusTexture;
 let neptuneTexture;
 let plutoTexture;
 let erisTexture; 
+
+//Different classes which could be subclasses but I was scared to break stuff
 class Star {
   constructor(x, y, earthDays) {
     this.texture;
@@ -36,15 +39,17 @@ class Star {
     // this.theName;
     this.day = EARTH_DAY * earthDays;
   }
+
   display() {
-    //fill(this.colour);
     noStroke();
     this.rotateOnAxis();
-    //rotateX(1.5708*2);
+    //push and pop here allows for the proper functioning of 'panorama' in the draw loop
+    push();
     texture(this.texture);
-    sphere(this.diameter/2);//, this.x, this.y); 
-    //rotateY(millis(1000)/36);
+    sphere(this.diameter/2);
+    pop();
   }
+
   rotateOnAxis() {
     rotate(frameCount /this.day);
   }
@@ -59,7 +64,6 @@ class Planet {
     this.y = Math.sin(this.radians)*this.distanceFromSun; 
     this.mass;
     this.diameter;
-    // this.theName;
     this.orbitalPeriod = earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromSun/this.orbitalPeriod;
     this.moons;
@@ -90,11 +94,11 @@ class Planet {
       rotateX(1.5708);
       texture(this.texture);
     }
-    if (this.ringSystem){
-      for (let theRing in this.rings){
-        theRing.displayRing();
-      }
-    }
+    // if (this.ringSystem){
+    //   for (let theRing in this.rings){
+    //     theRing.displayRing();
+    //   }
+    // }
     sphere(this.diameter/2);
     this.orbit(this.x, this.y);
     pop();
@@ -111,6 +115,16 @@ class Planet {
     stroke('white');
     circle(this.orbiting.x, this.orbiting.y, this.distanceFromSun*2);
   }
+  displayRings(){
+    for (let theRing in this.rings){
+      fill(this.r, this.g, this.b);
+      push();
+      translate(this.x, this.y, 0);
+      torus(this.ringRadius, this.ringTubeRadius, 24, 2);
+      pop();
+
+    }
+  }
   rotateOnAxis() {
     rotate(frameCount /this.day);
   }
@@ -124,8 +138,7 @@ class Planet {
   }
 }
 class Moon {
-  constructor(orbiting, earthYears){
-    
+  constructor(orbiting, earthYears){ 
     this.colour = "white";
     this.astronomicalUnits = 0.002444;
     this.orbiting = orbiting;
@@ -138,16 +151,14 @@ class Moon {
     this.orbitalPeriod = this.orbiting.orbitalPeriod+ earthYears * EARTH_YEAR;
     this.orbitalVelocity = 2* Math.PI * this.distanceFromOrbiting/this.orbitalPeriod;
   }
+
   orbit(){
-    // rotate(this.orbiting.orbitalInclination, [1, 0, 1]);
     this.radians += this.orbitalVelocity; 
     this.x = Math.cos(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun + Math.cos(this.radians*Math.PI/this.orbitalPeriod)*this.distanceFromOrbiting;
     this.y = Math.sin(this.orbiting.radians*this.orbiting.orbitalPeriod)*this.orbiting.distanceFromSun + Math.sin(this.radians*Math.PI/this.orbitalPeriod)*this.distanceFromOrbiting;
-    //This has an example of how to solve, with a very good formula. Should try it out. 
-    //https://www.google.com/search?sca_esv=6998cc71aa68975d&q=sin(x)+%2B+sin(10x)&source=lnms&fbs=AEQNm0Aa4sjWe7Rqy32pFwRj0UkWd8nbOJfsBGGB5IQQO6L3J7pRxUp2pI1mXV9fBsfh39Jw_Y7pXPv6W9UjIXzt09-YtiqJSnyznYMycaNNv7N_qyqA4nWiNpMBQ-7f5KgNVAh12h29aAKQPuzuPcMwfTQBzc1pQOFZyAaBYXuqtpmZcvsjt3wMGURkScfI-cTqUyiiBliztZhwmvMvmJMMIg2jPaA72A&sa=X&ved=2ahUKEwi21-nMwqCKAxVCATQIHer_CzsQ0pQJegQICBAB&biw=1592&bih=776&dpr=1
   }
+
   display(){
-    fill(this.colour);
     noStroke();
     fill(this.colour);
     push();
@@ -156,6 +167,7 @@ class Moon {
     this.orbit();
     pop();
   }
+
   displayOrbit() {
     smooth();
     noFill();
@@ -186,6 +198,7 @@ class Ring{
 }
 
 function checkForStar(body){
+  //mostly for deugging purposed, also assigns the sun as a centre point for orbit
   if (stars.includes(sun)){
     return sun;
   }
@@ -193,11 +206,8 @@ function checkForStar(body){
     console.log("No sun sorry!");
   }
 }
-//create different if statements for different body types 
-//Create body super class and look into sub classes 
-//create function for displaying moons and rings 
-//create a function to store my map settings to shorten setup 
 
+//Use data sheet to assign values to bodies
 function assignData(bodiesData){
   //Iterate through rows
   for (let row = 0; row<bodiesData.getRowCount(); row++){
@@ -226,6 +236,7 @@ function assignData(bodiesData){
   }
 }
 
+//Attempt at recreation of assign bodies data but for rings, it is breaking somewhere... :(
 function assignRingData(ringData, connectedThing){
   let tempArray = [];
   for (let row = 0; ringData.getRowCount(); row++){
@@ -245,11 +256,12 @@ function assignRingData(ringData, connectedThing){
   return tempArray;
   
 }
+
 function preload(){
   //Prepare all images and the data sheet to be used 
   ringData = loadTable('RingDataSheet.csv', 'csv', 'header');
   bodiesData = loadTable("SSDataSheet.csv", "csv", "header");
-  theBackground = loadImage('background.png');
+  bg = loadImage('360nightSky.jpg');
   sunTexture = loadImage('sunTexture.png');
   mercuryTexture = loadImage('mercuryTexture.png');
   venusTexture = loadImage('venusTexture.png');
@@ -282,13 +294,10 @@ function FlipStrings(){
   stringFlipper.set('erisTexture', erisTexture);
   stringFlipper.set('no', false);
   stringFlipper.set('yes', true);
-  // stringFlipper.set(jupiter, 'jupiter');
-  // stringFlipper.set(saturn, 'saturn');
-  // stringFlipper.set(uranus, 'uranus');
-  // stringFlipper.set(neptune, 'neptune')
 }
+
 function setup() {
-  //Display instructions
+  //Display instructions as a window alert before proceeding with simulation
   window.alert("Left-click to rotate, right-click to pan.");
   //get everything set up 
   FlipStrings();
@@ -296,15 +305,18 @@ function setup() {
   assignData(bodiesData);
   for (thePlanet in planets){
     if (thePlanet.ringSystem){
+      //supposed to create an array of rings to store within the planet class, its being dumb :(
       thePlanet.assignRings();
     }
   }
+  //Moon orbit is not working, but the shape it (not very helpful)
   //theMoon = new Moon(earth, 27/365);
+ 
 }
 
 function draw() {
-  background(0);
-
+  //Big shoutout to Luc Coutu for helping me find this beautiful function (also built in to p5js)
+  panorama(bg);
   //built into p5js, allows for 3D panning 
   orbitControl();
 
@@ -312,9 +324,11 @@ function draw() {
   for (let thePlanet of planets){
     thePlanet.displayOrbit();
     thePlanet.display();
+    thePlanet.displayRings();
   }
   for (let theStar of stars){
     theStar.display();
   }
+
   //theMoon.display();
 }
